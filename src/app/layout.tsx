@@ -3,6 +3,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Sidebar } from '@/components/sidebar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,8 +30,10 @@ export default function RootLayout({
             </Avatar>
           </div>
         </header>
-        <h1>ola mundo</h1>
-        {children}
+        <div className='grid h-full w-full grid-cols-[16rem_1fr] flex-1'>
+          <Sidebar/>
+          {children}
+        </div>
       </body>
     </html>
   )
