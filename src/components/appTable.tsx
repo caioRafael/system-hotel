@@ -27,17 +27,18 @@ export interface TableColumn<T> {
 export interface MenuOptionsProps {
   key: string
   text: string
-  onClick: () => void
+  onClick: () => void | ReactElement
 }
 
 interface AppTableProps<T extends Entity> {
   columns: TableColumn<T>[]
   values: T[]
   menuOptions?: (item: T) => MenuOptionsProps[]
+  action?: ReactElement
 }
 
 export function AppTable<T extends Entity>(props: AppTableProps<T>) {
-  const { columns, values, menuOptions } = props
+  const { columns, values, menuOptions, action } = props
 
   const MenuOption = (item: T) => {
     const itens = menuOptions ? menuOptions(item) : []
@@ -63,36 +64,42 @@ export function AppTable<T extends Entity>(props: AppTableProps<T>) {
     <div className="flex flex-col items-center w-full p-4">
       <div className="flex flex-row items-center justify-between p-2 w-full">
         <Input placeholder="Pesquisa" className="w-60" />
-        <Button>Adicionar</Button>
+        {action}
       </div>
       <div className="w-full p-1 border rounded-xl">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {columns.map((column) => (
-                <TableHead key={column.key}>{column.title}</TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {values.map((value) => (
-              <TableRow key={value.id}>
+        {values.length === 0 ? (
+          <div className="w-full flex items-center">
+            <h1>Nenhum cadastro no momento</h1>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
                 {columns.map((column) => (
-                  <>
-                    <TableCell key={column.key}>
-                      {column.format
-                        ? column.format(value[column.key])
-                        : value[column.key]}
-                    </TableCell>
-                  </>
+                  <TableHead key={column.key}>{column.title}</TableHead>
                 ))}
-                {menuOptions && (
-                  <TableCell className="w-10">{MenuOption(value)}</TableCell>
-                )}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {values.map((value) => (
+                <TableRow key={value.id}>
+                  {columns.map((column) => (
+                    <>
+                      <TableCell key={column.key}>
+                        {column.format
+                          ? column.format(value[column.key])
+                          : value[column.key]}
+                      </TableCell>
+                    </>
+                  ))}
+                  {menuOptions && (
+                    <TableCell className="w-10">{MenuOption(value)}</TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   )

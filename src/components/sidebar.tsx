@@ -29,6 +29,12 @@ export function Sidebar() {
       icon: <Home />,
     },
     {
+      name: 'Quartos',
+      key: 'quartos',
+      route: 'quartos',
+      icon: <Home />,
+    },
+    {
       name: 'Reservas',
       key: 'reservas',
       route: 'reservas',

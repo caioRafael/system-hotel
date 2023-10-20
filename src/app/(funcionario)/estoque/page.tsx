@@ -1,28 +1,20 @@
-import { AppTable, TableColumn } from '@/components/appTable'
 import { Title } from '@/components/title'
-import Stock, { stockData } from '@/types/Stock'
-import formatDate from '@/utils/formatDate'
+import { EstoqueContainer } from './components/EstoqueContainer'
+import { getUser } from '@/lib/auth'
+import { api } from '@/lib/api/api'
 
-export default function Estoque() {
+export default async function Estoque() {
+  const { token } = await getUser()
+  const response = await api.get('item/all', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  console.log(response.data)
   return (
     <div className="w-full h-full p-5 flex flex-col gap-3">
       <Title title="Estoque" />
-      <AppTable values={stockData} columns={columns} />
+      <EstoqueContainer estoque={response.data} token={token} />
     </div>
   )
 }
-
-const columns: TableColumn<Stock>[] = [
-  {
-    key: 'itemName',
-    title: 'Nome',
-  },
-  {
-    key: 'quantity',
-    title: 'Quantidade',
-  },
-  {
-    key: 'minStockLevel',
-    title: 'Quantidade minima',
-  },
-]

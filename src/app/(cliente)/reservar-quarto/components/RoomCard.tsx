@@ -13,7 +13,7 @@ interface RoomCardProps {
 export function RoomCard(props: RoomCardProps) {
   const { room } = props
   const router = useRouter()
-  const goToPage = (route: number) => {
+  const goToPage = (route: string) => {
     router.push(`/reservar-quarto/${route}`)
   }
 
@@ -21,7 +21,7 @@ export function RoomCard(props: RoomCardProps) {
     <Card className="flex flex-col justify-between p-0 w-60 min-h-80 overflow-hidden">
       <CardHeader className="p-0">
         <Image
-          src={'https://github.com/caioRafael.png'}
+          src={room.photos[0] as string}
           alt="image-room"
           width={240}
           height={240}
@@ -30,10 +30,10 @@ export function RoomCard(props: RoomCardProps) {
       </CardHeader>
       <CardContent className="my-2 pb-0">
         <h1>Quarto {room.roomNumber}</h1>
-        <h1>{room.amenities.join(', ')}</h1>
+        {/* <h1>{room.amenities.join(', ')}</h1> */}
       </CardContent>
       <CardFooter>
-        <Button onClick={() => goToPage(room.roomNumber)}>Reservar</Button>
+        <Button onClick={() => goToPage(room.id as string)}>Reservar</Button>
       </CardFooter>
     </Card>
   )

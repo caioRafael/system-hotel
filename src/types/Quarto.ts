@@ -3,7 +3,7 @@ import Entity from './Entity'
 export default interface Quarto extends Entity {
   roomNumber: number
   availability: boolean
-  amenities: string[]
+  // amenities: string[]
   photos: (string | File)[]
 }
 

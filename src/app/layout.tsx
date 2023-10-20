@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Sidebar } from '@/components/sidebar'
+import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,21 +20,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.className} w-screen min-h-screen flex flex-col`}>
-        <header className='flex flex-row items-center justify-between px-5 h-14 border-b border-border bg-background'>
-          <h1 className='flex flex-row gap-2 '><Hotel/> HotelManeger</h1>
+      <body
+        className={`${inter.className} w-screen min-h-screen flex flex-col`}
+      >
+        <header className="flex flex-row items-center justify-between px-5 h-14 border-b border-border bg-background">
+          <h1 className="flex flex-row gap-2 ">
+            <Hotel /> HotelManeger
+          </h1>
 
           <div>
             <Avatar>
-              <AvatarImage src=''/>
+              <AvatarImage src="" />
               <AvatarFallback>CR</AvatarFallback>
             </Avatar>
           </div>
         </header>
-        <div className='grid h-full w-full grid-cols-[16rem_1fr] flex-1'>
-          <Sidebar/>
-          {children}
-        </div>
+        {children}
+        <Toaster />
       </body>
     </html>
   )

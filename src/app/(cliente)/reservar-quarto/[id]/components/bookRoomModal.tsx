@@ -11,11 +11,41 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { api } from '@/lib/api/api'
+import { addDays } from 'date-fns'
 import { useState } from 'react'
+import { DateRange } from 'react-day-picker'
 
-export function BookRoomModal() {
+interface BookModalProps {
+  userId: string
+  roomId: string
+  token: string
+}
+
+export function BookRoomModal(props: BookModalProps) {
+  const { userId, roomId, token } = props
   const [days, setDays] = useState<number>(0)
   const [open, setOpen] = useState<boolean>(false)
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(),
+    to: addDays(new Date(), days),
+  })
+
+  const createReservation = async () => {
+    const data = {
+      checkInDate: date?.from,
+      checkOutDate: date?.to,
+      totalCost: days * 100,
+      userId,
+      roomId,
+    }
+
+    await api.post('reservation/create', data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -34,7 +64,7 @@ export function BookRoomModal() {
             onChange={(e) => setDays(Number(e.target.value))}
           />
           <Label>Periodo</Label>
-          <DatePickerWithRange className="w-full" />
+          <DatePickerWithRange date={date} setDate={setDate} />
 
           <Label>Valor a pagar:</Label>
           <h1>{days * 100}</h1>
@@ -43,7 +73,14 @@ export function BookRoomModal() {
           <Button variant={'outline'} onClick={() => setOpen(false)}>
             Cancelar
           </Button>
-          <Button onClick={() => setOpen(false)}>Reservar</Button>
+          <Button
+            onClick={() => {
+              createReservation()
+              setOpen(false)
+            }}
+          >
+            Reservar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
